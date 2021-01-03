@@ -1,0 +1,175 @@
+<body style="background:rgb(0, 0, 0)">
+<canvas width=600 height=300></canvas>
+</body>
+<script>
+  son=0
+  function whistle(f,i,t,v){
+ aud = new AudioContext()
+ g=aud.createGain()
+      o = aud.createOscillator()
+    o.frequency.value=f
+    o.type=t
+    g.gain.value=v
+    o.start()
+    o.connect(g)
+    console.log(g.gain.value)
+g.connect(aud.destination)
+  o.stop(i)
+
+  }
+  function sucSound(){
+    whistle(500,0.1,"square",1)
+    setTimeout(function(){whistle(2500,0.05,"square",1)},100)
+  }
+  function faiSound(){
+    whistle(300,0.4,"sawtooth",1)
+    setTimeout(function(){whistle(200,0.8,"sawtooth",1)},360)
+}
+  function Wrong(){
+    whistle(100,0.24,"sine",4)
+
+  }
+stopped=0
+  used='Used Characters:'
+  function ran(){
+    return Math.random()-0.5
+  }
+  corlet=0
+  words=["nice","red","cyan","crank","script","funky","moose","subscribe","and","or","not","sure?","horse","nine","television","random","dog","a","i","feline","monkey","joyful","antiproton","positron","homophone","antonym","Program","polymer","oxane","neodymium","promethium","hexadecimal","porcine-circovirus","iridoviridae","SARS-COV-2","twenty-five","mitosis","chromosome"]
+words.sort(ran)
+sel = words[0]
+selA = sel.split("")
+  function Restart(){
+    son=0
+    stopped=0
+    c.fillStyle="#000000"
+    c.fillRect(0,0,can.width,can.height)
+    sc=6
+    used='Used Characters: '
+    corlet=0
+  words.sort(ran)
+  sel = words[Math.round(Math.random()*(words.length-1))]
+  selA = sel.split("")
+  }
+  can = document.getElementsByTagName("canvas")[0]
+  c = can.getContext("2d")
+lC="#FFFF00"
+sc=6;
+(function cl(){
+if(lC=="#FF0000"){
+  lC="#FFFF00"
+}else{
+  lC="#FF0000"
+}
+setTimeout(cl,500)
+})()
+function Animate(){
+  can.style.width = outerWidth-80
+  can.style.height = (outerWidth-80)/2
+  if(sc<0){
+    sc=0
+  }
+c.fillStyle="#15151510"
+c.fillRect(0,0,can.width,can.height)
+c.fillStyle="#FFFFFF"
+c.fillRect(20,10,10,can.height)
+c.fillRect(20,10,can.width/3,10)
+c.fillRect(can.width/3,10,10,100)
+c.strokeStyle="#FFFFFF"
+if(sc>0){
+c.beginPath()
+c.lineWidth=5
+c.arc((can.width/3)+5,140,30,0,9)
+c.stroke()
+}
+if(sc>3){
+  c.fillRect((can.width/3)+2.5,170,5,50)
+}
+if(sc>1){
+c.beginPath()
+  c.moveTo((can.width/3)+2.5,170)
+  c.lineTo((can.width/3)-35,200)
+c.stroke()
+}
+if(sc>2){
+c.beginPath()
+  c.moveTo((can.width/3)+2.5,168)
+  c.lineTo((can.width/3)+42.5,200)
+c.stroke()
+}
+if(sc>4){
+  c.beginPath()
+    c.moveTo((can.width/3)+2.5,218)
+    c.lineTo((can.width/3)+42.5,250)
+  c.stroke()
+}
+if(sc>5){
+  c.beginPath()
+    c.moveTo((can.width/3)+5,218)
+    c.lineTo((can.width/3)-35,250)
+  c.stroke()
+}
+for(var n=0;n<sel.length;n++){
+  c.fillStyle="#FFAAFF"
+  c.font="30px monospace"
+  c.fillText(selA[n],100+(n*20),can.height-20)
+}
+c.font = "20px monospace"
+c.fillStyle="#AA55FF"
+c.fillText(used,250,40)
+if(sc==0){
+  if(!son){
+    faiSound()
+    son=1
+  }
+  c.font="100px Arial"
+  c.fillStyle=lC
+  c.fillText("You Loose!",70,200)
+c.fillStyle="#AAAAFF"
+c.font="13px Arial"
+c.fillText("Click to Restart.",70,230)
+can.onclick = Restart
+stopped=true
+}else{
+  can.onclick=function(){
+can.requestFullscreen()
+  }
+}
+
+if(corlet==sel.length){
+if(!son){
+  sucSound()
+son=1
+}
+  c.font="100px Arial"
+  c.fillStyle=lC
+  c.fillText("You Win!",70,200)
+c.fillStyle="#AAAAAA"
+c.font="20px Arial"
+c.fillText("Click to Restart.",70,230)
+can.onclick = Restart
+stopped=true
+}
+
+
+}
+document.onkeydown = function(l){
+if(l.key!="_" && !stopped && l.key!="Shift" && l.key!="CapsLock"){
+isOn=false
+for(n=0;n<selA.length;n++){
+
+  if(selA[n].toUpperCase()==l.key.toUpperCase()){
+selA[n]="_"
+isOn=true
+corlet++
+  }
+}
+if(!isOn){
+  sc--
+  used += l.key+" "
+Wrong()
+}
+}
+}
+setInterval(Animate,10)
+</script>
